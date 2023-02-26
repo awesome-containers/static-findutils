@@ -19,6 +19,6 @@ RUN set -xeu; \
     chown -cR 0:0 ./*; \
     ./find . --version
 
-# slim static coreutils image
+# slim static findutils image
 FROM ghcr.io/awesome-containers/static-bash:$STATIC_BASH_VERSION-slim AS static-bash
 COPY --from=build /src/findutils/ /bin/

@@ -27,6 +27,6 @@ RUN set -xeu; \
     ! ldd bin/xargs && :; \
     ./bin/find . --version
 
-# static Curl image
+# static findutils image
 FROM ghcr.io/awesome-containers/static-bash:$STATIC_BASH_VERSION
 COPY --from=build /src/findutils/bin/ /bin/
