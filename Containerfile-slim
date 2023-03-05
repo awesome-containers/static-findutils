@@ -1,16 +1,25 @@
 # https://github.com/awesome-containers/static-bash
 ARG STATIC_BASH_VERSION=5.2.15
-ARG STATIC_FINDUTILS_VERSION=4.9.0
+ARG STATIC_BASH_IMAGE=ghcr.io/awesome-containers/static-bash
 
-FROM ghcr.io/awesome-containers/static-findutils:$STATIC_FINDUTILS_VERSION AS static-findutils
-FROM ghcr.io/awesome-containers/alpine-build-essential:3.17 AS build
+# https://github.com/awesome-containers/static-findutils
+ARG STATIC_FINDUTILS_VERSION=4.9.0
+ARG STATIC_FINDUTILS_IMAGE=ghcr.io/awesome-containers/static-findutils
+
+# https://github.com/awesome-containers/alpine-build-essential
+ARG BUILD_ESSENTIAL_VERSION=3.17
+ARG BUILD_ESSENTIAL_IMAGE=ghcr.io/awesome-containers/alpine-build-essential
+
+
+FROM $STATIC_BASH_IMAGE:$STATIC_BASH_VERSION-slim AS static-bash
+FROM $STATIC_FINDUTILS_IMAGE:$STATIC_FINDUTILS_VERSION AS static-findutils
+FROM $BUILD_ESSENTIAL_IMAGE:$BUILD_ESSENTIAL_VERSION AS build
 
 WORKDIR /src/findutils
 COPY --from=static-findutils /bin/find /bin/locate /bin/updatedb /bin/xargs ./
 
 RUN set -xeu; \
     for f in find locate xargs; do \
-        strip -s -R .comment -R .gnu.version --strip-unneeded "$f"; \
         upx --no-progress --no-color "$f"; \
         upx -t --no-progress --no-color "$f"; \
         ! ldd "$f" && :; \
@@ -20,5 +29,5 @@ RUN set -xeu; \
     ./find . --version
 
 # slim static findutils image
-FROM ghcr.io/awesome-containers/static-bash:$STATIC_BASH_VERSION-slim AS static-bash
+FROM static-bash
 COPY --from=build /src/findutils/ /bin/
