@@ -2,7 +2,7 @@
 
 Statically linked [Findutils] container image with [Bash]
 
-> ~ 5,0M
+> ~ 1,7M (1,1M bash)
 
 ```bash
 ghcr.io/awesome-containers/static-findutils:latest
@@ -15,7 +15,7 @@ docker.io/awesomecontainers/static-findutils:4.9.0
 Slim statically linked [Findutils] container image with [Bash]
 packaged with [UPX]
 
-> ~ 880K
+> ~ 879K (578K bash)
 
 ```bash
 ghcr.io/awesome-containers/static-findutils:latest-slim
